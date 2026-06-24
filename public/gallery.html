@@ -3,11 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Class Fellows Portal for the Matric Class of 1999, Govt. Higher Secondary School, Farooq Abad."
-    />
-    <title>GHSS Farooq Abad — Matric Class of 1999</title>
+    <meta name="description" content="Old photos and memories — Matric Class of 1999, GHSS Farooq Abad." />
+    <title>Photo Gallery — GHSS Farooq Abad Class of 1999</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://api.cloudinary.com" />
@@ -17,7 +14,7 @@
     />
     <link rel="stylesheet" href="/css/styles.css" />
   </head>
-  <body data-page="fellows">
+  <body data-page="gallery">
     <a class="skip-link" href="#main">Skip to content</a>
 
     <!-- ===== Shared top nav ===== -->
@@ -32,7 +29,7 @@
           <a href="/gallery.html" data-nav="gallery">Photo Gallery</a>
         </nav>
         <div class="nav-actions">
-          <button id="add-btn" class="btn btn-primary" type="button">+ Add your profile</button>
+          <button id="add-photo-btn" class="btn btn-primary admin-only" type="button">+ Add photos</button>
           <button id="auth-btn" class="btn btn-ghost" type="button">Admin login</button>
         </div>
       </div>
@@ -41,38 +38,36 @@
     <!-- ===== Hero ===== -->
     <section class="hero">
       <div class="container hero-inner">
-        <span class="eyebrow">Govt. Higher Secondary School · Farooq Abad</span>
-        <h1>Alumni Directory — Year &rsquo;99</h1>
+        <span class="eyebrow">Matric Class of 1999</span>
+        <h1>Photo Gallery</h1>
         <p>
-          The official directory of our batch. Reconnect with classmates, share where life has
-          taken you, and revisit the memories from our school years.
+          A curated collection of photographs from our years at GHSS Farooq Abad — class trips,
+          sports days, and school functions. Select any photo to view it full size.
         </p>
         <div class="hero-stats">
-          <div class="stat"><b id="stat-fellows">—</b><span>Class fellows</span></div>
-          <div class="stat"><b id="stat-sections">—</b><span>Sections</span></div>
+          <div class="stat"><b id="stat-photos">—</b><span>Photos</span></div>
         </div>
       </div>
     </section>
 
     <main id="main" tabindex="-1">
       <div class="container">
-        <!-- search/filter floats over hero bottom -->
-        <section class="toolbar" aria-label="Search and filter">
+        <section class="toolbar" aria-label="Filter">
           <div class="field grow">
-            <label for="search" class="sr-only">Search by name</label>
-            <input id="search" type="search" placeholder="🔍  Search class fellows by name…" autocomplete="off" />
+            <label class="sr-only">Gallery</label>
+            <input type="text" value="Browse our shared memories" disabled aria-hidden="true" style="border:none;background:transparent;font-weight:600;color:var(--muted);" />
           </div>
           <div class="field">
-            <label for="section-filter" class="sr-only">Filter by section</label>
-            <select id="section-filter">
-              <option value="">All sections</option>
+            <label for="year-filter" class="sr-only">Filter by year</label>
+            <select id="year-filter">
+              <option value="">All years</option>
             </select>
           </div>
         </section>
 
         <div class="section-wrap">
           <p id="status-line" class="status-line" role="status" aria-live="polite"></p>
-          <section id="profiles" class="grid" aria-label="Class fellows" aria-busy="true"></section>
+          <section id="gallery" class="gallery" aria-label="Old photos" aria-busy="true"></section>
         </div>
       </div>
     </main>
@@ -83,41 +78,45 @@
       </div>
     </footer>
 
-    <!-- ===== Profile add/edit modal ===== -->
-    <div id="profile-modal" class="modal" hidden>
+    <!-- ===== Lightbox ===== -->
+    <div id="lightbox" class="lightbox" hidden>
+      <button class="lightbox-close" data-close aria-label="Close">&times;</button>
+      <button class="lightbox-nav prev" id="lb-prev" type="button" aria-label="Previous photo">&#8249;</button>
+      <button class="lightbox-nav next" id="lb-next" type="button" aria-label="Next photo">&#8250;</button>
+      <div>
+        <img id="lb-img" src="" alt="" />
+        <div class="lightbox-cap" id="lb-cap"></div>
+      </div>
+      <button class="btn btn-danger lightbox-del admin-only" id="lb-del" type="button">Delete photo</button>
+    </div>
+
+    <!-- ===== Add photos modal (admin) ===== -->
+    <div id="photo-modal" class="modal" hidden>
       <div class="modal-backdrop" data-close></div>
-      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="photo-modal-title">
         <div class="modal-head">
-          <h2 id="profile-modal-title">Add your profile</h2>
+          <h2 id="photo-modal-title">Add photos to the gallery</h2>
           <button class="icon-btn" type="button" data-close aria-label="Close">&times;</button>
         </div>
-        <form id="profile-form" class="modal-body">
-          <input type="hidden" id="profile-id" />
+        <form id="photo-form" class="modal-body">
           <div class="field">
-            <label for="name">Name <span class="req">*</span></label>
-            <input id="name" name="name" type="text" required minlength="2" maxlength="80" />
+            <label for="g-photos">Photos <span class="req">*</span></label>
+            <input id="g-photos" type="file" accept="image/*" multiple required />
+            <small class="hint">Select one or more old photos. The caption &amp; year below apply to all of them.</small>
+            <div id="g-previews" class="photo-previews"></div>
           </div>
           <div class="field">
-            <label for="section">Section <span class="req">*</span></label>
-            <select id="section" name="section" required>
-              <option value="" disabled selected>Select a section…</option>
-            </select>
+            <label for="g-caption">Caption</label>
+            <input id="g-caption" type="text" maxlength="200" placeholder="e.g. Annual sports day, 10th class" />
           </div>
           <div class="field">
-            <label for="description">About you</label>
-            <textarea id="description" name="description" rows="4" maxlength="1000"
-              placeholder="Where are you now, what do you do, a memory from school…"></textarea>
+            <label for="g-year">Year taken</label>
+            <input id="g-year" type="number" min="1950" max="2035" placeholder="e.g. 1998" />
           </div>
-          <div class="field">
-            <label for="photos">Photos</label>
-            <input id="photos" name="photos" type="file" accept="image/*" multiple />
-            <small id="upload-hint" class="hint">You can add up to 6 photos.</small>
-            <div id="photo-previews" class="photo-previews"></div>
-          </div>
-          <p id="profile-form-error" class="form-error" role="alert"></p>
+          <p id="g-error" class="form-error" role="alert"></p>
           <div class="modal-foot">
             <button type="button" class="btn btn-ghost" data-close>Cancel</button>
-            <button type="submit" class="btn btn-primary" id="profile-submit">Save profile</button>
+            <button type="submit" class="btn btn-primary" id="g-submit">Upload</button>
           </div>
         </form>
       </div>
@@ -152,6 +151,6 @@
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
     <script src="/js/common.js" defer></script>
-    <script src="/js/app.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
   </body>
 </html>
