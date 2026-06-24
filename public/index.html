@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Class Fellows Portal for the Matric Class of 1999, Govt. Higher Secondary School, Farooq Abad."
+    />
+    <title>GHSS Farooq Abad — Matric Class of 1999</title>
+    <link rel="preconnect" href="https://api.cloudinary.com" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand">
+          <h1 id="portal-title">GHSS Farooq Abad</h1>
+          <p class="tagline">Matric Class of 1999 — Class Fellows Portal</p>
+        </div>
+        <div class="header-actions">
+          <button id="add-btn" class="btn btn-primary" type="button">+ Add your profile</button>
+          <button id="admin-btn" class="btn btn-ghost" type="button">Admin login</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="container" tabindex="-1">
+      <section class="toolbar" aria-label="Search and filter">
+        <div class="field grow">
+          <label for="search" class="sr-only">Search by name</label>
+          <input
+            id="search"
+            type="search"
+            placeholder="Search class fellows by name…"
+            autocomplete="off"
+          />
+        </div>
+        <div class="field">
+          <label for="section-filter" class="sr-only">Filter by section</label>
+          <select id="section-filter">
+            <option value="">All sections</option>
+          </select>
+        </div>
+      </section>
+
+      <p id="status-line" class="status-line" role="status" aria-live="polite"></p>
+
+      <section id="profiles" class="grid" aria-label="Class fellows" aria-busy="true"></section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>Govt. Higher Secondary School, Farooq Abad · Matric Class of 1999</p>
+      </div>
+    </footer>
+
+    <!-- ===== Profile add/edit modal ===== -->
+    <div id="profile-modal" class="modal" hidden>
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+        <div class="modal-head">
+          <h2 id="profile-modal-title">Add your profile</h2>
+          <button class="icon-btn" type="button" data-close aria-label="Close">&times;</button>
+        </div>
+        <form id="profile-form" class="modal-body">
+          <input type="hidden" id="profile-id" />
+
+          <div class="field">
+            <label for="name">Name <span class="req">*</span></label>
+            <input id="name" name="name" type="text" required minlength="2" maxlength="80" />
+          </div>
+
+          <div class="field">
+            <label for="section">Section <span class="req">*</span></label>
+            <select id="section" name="section" required>
+              <option value="" disabled selected>Select a section…</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="description">About you</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              maxlength="1000"
+              placeholder="Where are you now, what do you do, a memory from school…"
+            ></textarea>
+          </div>
+
+          <div class="field">
+            <label for="photos">Photos</label>
+            <input id="photos" name="photos" type="file" accept="image/*" multiple />
+            <small id="upload-hint" class="hint">You can add up to 6 photos.</small>
+            <div id="photo-previews" class="photo-previews"></div>
+          </div>
+
+          <p id="profile-form-error" class="form-error" role="alert"></p>
+
+          <div class="modal-foot">
+            <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+            <button type="submit" class="btn btn-primary" id="profile-submit">Save profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== Profile detail modal ===== -->
+    <div id="detail-modal" class="modal" hidden>
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="detail-name">
+        <div class="modal-head">
+          <h2 id="detail-name">Profile</h2>
+          <button class="icon-btn" type="button" data-close aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body" id="detail-body"></div>
+      </div>
+    </div>
+
+    <!-- ===== Admin login modal ===== -->
+    <div id="login-modal" class="modal" hidden>
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card narrow" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <div class="modal-head">
+          <h2 id="login-title">Admin login</h2>
+          <button class="icon-btn" type="button" data-close aria-label="Close">&times;</button>
+        </div>
+        <form id="login-form" class="modal-body">
+          <div class="field">
+            <label for="login-username">Username</label>
+            <input id="login-username" name="username" type="text" autocomplete="username" required />
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input
+              id="login-password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+          <p id="login-error" class="form-error" role="alert"></p>
+          <div class="modal-foot">
+            <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+            <button type="submit" class="btn btn-primary">Log in</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="/js/app.js" defer></script>
+  </body>
+</html>
