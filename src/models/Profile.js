@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Sections offered by the school for the Matric class. Edit this list to
 // match your batch; it is enforced on the server and used by the frontend.
-const SECTIONS = ['Science', 'Arts', 'General'];
+const SECTIONS = ['A', 'B', 'C', 'D'];
 
 const profileSchema = new mongoose.Schema(
   {

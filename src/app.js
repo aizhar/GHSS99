@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const Profile = require('./models/Profile');
 const profilesRouter = require('./routes/profiles');
+const photosRouter = require('./routes/photos');
 const authRouter = require('./routes/auth');
 const uploadRouter = require('./routes/upload');
 
@@ -26,6 +27,7 @@ app.get('/api/meta', (req, res) => {
 });
 
 app.use('/api/profiles', profilesRouter);
+app.use('/api/photos', photosRouter);
 app.use('/api/login', authRouter);
 app.use('/api/upload-signature', uploadRouter);
 
